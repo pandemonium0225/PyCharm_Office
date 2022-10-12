@@ -15,5 +15,20 @@ def extract_sub():
             merger.write(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Merge_test\\" + file)
             merger.close()
 
+def merge_and_extract():
+    """抽取子資料夾中的檔案，合併後另存至上一層資料夾"""
+    rootDir = input("please input the directory you want to merge and extract!!!")
+    for dirName, subDir,fileList in os.walk(rootDir, topdown='True'):
+        merger = PdfFileMerger()
+        try:
+            for fname in reversed(fileList):
+                merger.append(PdfFileReader(open(os.path.join(dirName,fname),'rb')))
+            merger.write(str(dirName) + ".pdf")
+        except Exception as e:
+            print(fname + " not correctly merged, because...", e)
+            continue
+        merger.close()
+
+
 if __name__ == "__main__":
-    extract_sub()
+    merge_and_extract()

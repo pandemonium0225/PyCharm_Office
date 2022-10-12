@@ -110,5 +110,5 @@ def dbm_amount():
     df_dv360_transpose.to_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Sep\Monthly_File_20221003.xlsx")
     # 記得EXCEL檔裡面的文字要轉換數字 就是選取之後按右鍵
 
-    dbm_amount()
+    # dbm_amount()
 
