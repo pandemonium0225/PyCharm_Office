@@ -19,7 +19,7 @@ def rename_PG_FB():
             lines = list(filter(bool,string.split('\n')))
             for i in range(len(lines)):
                 if "Account Id / Group:" in lines[i]:
-                    advertiser_id=lines[i+1]
+                    advertiser_id = lines[i+1]
                     for n in range(len(ref_list)):
                         try:
                             if int(advertiser_id) == int(ref_list['帳號編號'][n]):

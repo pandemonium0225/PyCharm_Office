@@ -30,5 +30,20 @@ def merge_and_extract():
         merger.close()
 
 
+def save_to_invoice_folder():
+    rootDir = r"C:\Users\sebein\Desktop\結帳\DBM\2022\Sep\2022-09"
+    files = os.listdir(rootDir)
+    os.makedirs(rootDir + "\\invoices")
+    save_location = rootDir + "\\invoices\\"
+    for f in files:
+        fullpath = os.path.join(rootDir,f)
+        if os.path.isfile(fullpath):
+            os.replace(fullpath,os.path.join(save_location+f))
+
+
+
+
+
 if __name__ == "__main__":
     merge_and_extract()
+    save_to_invoice_folder()
