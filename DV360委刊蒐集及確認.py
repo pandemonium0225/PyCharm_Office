@@ -15,7 +15,7 @@ io_directory = [r'P:\PM Client\Performics\Performics Operation PG\_IO\Programmat
 directory = r'D:\test' # 確認是否需要留這個變數
 destination = r'D:\destination'
 io_list = []
-path = r'C:\Users\sebein\Desktop\結帳\DBM\2022\Aug\Monthly_File_202208_original.xlsx'
+path = r'C:\Users\sebein\Desktop\結帳\DBM\2022\Oct\Monthly_File_202210.xlsx'
 data = pd.DataFrame(pd.read_excel(path))
 for i in data['Insertion Order']:
     try:
@@ -161,7 +161,7 @@ def check_owner():
                       df_pg_dv360["Brand"][idx].values)
 
 if __name__ == "__main__":
-    # move_io()
-    # get_io_difference()
-    # dedup_io()
+    move_io()
+    get_io_difference()
+    dedup_io()
     check_owner()

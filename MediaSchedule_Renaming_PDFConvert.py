@@ -29,13 +29,19 @@ def renaming_schedule():
             elif ("TW8081") in client:
                 print("renaming {} to {}".format(file,phase2))
                 wb.save(os.path.join(folder, phase2))
-                # os.rename(filepath,os.path.join(path, phase2))            elif "TW1713" in client:
-                print("renaming {} to {}".format(file,phase1))
-                wb.save(os.path.join(folder, phase1))
+                # print("renaming {} to {}".format(file,phase1))
+                # wb.save(os.path.join(folder, phase1))
                 # os.rename(filepath,os.path.join(path, phase1))
             elif "GOOASI" in client:
                 print("renaming {} to {}".format(file,gam))
                 wb.save(os.path.join(folder,gam))
+            elif "TW1713" in client:
+                print("renaming {} to {}".format(file, phase1))
+                wb.save(os.path.join(folder,phase1))
+            elif "HK9067" in client:
+                print("renaming {} to {}".format(file, phase1))
+                wb.save(os.path.join(folder, phase1))
+
             else:
                 print("Non_Apex Campaign, passed")
             wb.close()
@@ -63,7 +69,10 @@ def convert_to_pdf():
     for path, _, files in os.walk(schedule_location):
         for file in files:
             filepath = os.path.join(path, file)
-            exceltopdf(filepath)
+            try:
+                exceltopdf(filepath)
+            except Exception as e:
+                print(e)
 
 if __name__ == '__main__':
     renaming_schedule()

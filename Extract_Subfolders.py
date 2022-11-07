@@ -12,7 +12,7 @@ def extract_sub():
                 if file.endswith('.pdf'):
                     print(file)
                 merger.append(parent_folder + subfolder + '\\' + file)
-            merger.write(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Merge_test\\" + file)
+            merger.write(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Oct\test\\" + file)
             merger.close()
 
 def merge_and_extract():
@@ -31,14 +31,14 @@ def merge_and_extract():
 
 
 def save_to_invoice_folder():
-    rootDir = r"C:\Users\sebein\Desktop\結帳\DBM\2022\Sep\2022-09"
+    rootDir = r"C:\Users\sebein\Desktop\結帳\Adwords\2022\2022_10\GoogleAdsInvoice"
     files = os.listdir(rootDir)
-    os.makedirs(rootDir + "\\invoices")
+    os.mkdir(rootDir + "\\invoices")
     save_location = rootDir + "\\invoices\\"
     for f in files:
         fullpath = os.path.join(rootDir,f)
         if os.path.isfile(fullpath):
-            os.replace(fullpath,os.path.join(save_location+f))
+            os.replace(fullpath,os.path.join(save_location + f))
 
 
 

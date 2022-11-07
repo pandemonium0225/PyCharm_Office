@@ -55,5 +55,6 @@ def nat_merge():
 # merge_pdf(outup_pdf_path, extracted_files)
 
 if __name__ == "__main__":
-    all_file = fetch_all_files(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Merge_test")
-    merge_pdf(r"D:\Merge_test", all_file)
+    # all_file = fetch_all_files(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Oct\2022-10")
+    # merge_pdf(r"D:\Merge_test", all_file)
+    nat_merge()

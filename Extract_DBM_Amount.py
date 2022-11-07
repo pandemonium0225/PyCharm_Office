@@ -41,7 +41,7 @@ def dbm_amount():
     print("目前內容為\n\n" + t_content)
 
     # orderID=re.compile(r'單[\s]?.*?ID.*?((?<![ID~|CP~])([^\.0：]ID：(\d{7,8})(?!\.0)))',re.S|re.M)
-    orderID = re.compile(r'單[\s]?.*?((?<!\_[ID~|CP~])([^\.0：]：(\d{7,8})))', re.S | re.M)
+    orderID = re.compile(r'單[\s]?.*?((?<!\_[ID~|CP~])([^\.0：]：(\d{7,10})))', re.S | re.M)
     # the "?" being removed on 2021/12/22
     # the original is r'單[\s]?.*?ID.*?((?<![ID~|CP~])([^\.0：]?\d{7,8}(?!\.0)))',re.S|re.M
     for order in orderID.finditer(t_content):
@@ -107,8 +107,12 @@ def dbm_amount():
     print(df_dv360_transpose)
 
     df_dv360_transpose = df_dv360_transpose.reindex(columns=['媒體費用','平台費用','先前月分的無效流量調整項 (媒體費用)','先前月分的無效流量調整項 (平台費用)','超量放送調整項：媒體費用','超量放送調整項：平台費用','資料費用'])
-    df_dv360_transpose.to_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Sep\Monthly_File_20221003.xlsx")
+    dv360_file_location = input("please input the location with file name you want the extracted info file located")
+    df_dv360_transpose.to_excel(dv360_file_location)
+    # df_dv360_transpose.to_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Sep\Monthly_File_20221003.xlsx")
     # 記得EXCEL檔裡面的文字要轉換數字 就是選取之後按右鍵
 
-    # dbm_amount()
+
+if __name__ == "__main__":
+    dbm_amount()
 

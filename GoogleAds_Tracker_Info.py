@@ -23,8 +23,8 @@ df_op_Apex = wks_op.get_as_df(start="A1", numerize=False, include_tailing_empty=
 wks_normal = sht_normal.worksheets()
 df_normal = wks_normal[0].get_as_df(start="A1", numerize=False, include_tailing_empty=False)
 
-# 將下載報表轉換為dataframe
-GoogleAds_monthly = pd.read_excel(r"C:\Users\sebein\Desktop\結帳\Adwords\2022\2022-09\Billed cost_test.xlsx",
+# 將下載報表轉換為dataframe，目前讀檔預設為excel檔
+GoogleAds_monthly = pd.read_excel(r"C:\Users\sebein\Desktop\結帳\Adwords\2022\2022_10\Billed cost_20221104.xlsx",
                                   skiprows=2,
                                   index_col=None,
                                   na_values=['NA']
@@ -83,4 +83,4 @@ for k in range(len(GoogleAds_monthly['jobnumber'])):
 
 # print(GoogleAds_monthly[GoogleAds_monthly['owner'] != '']['owner'])
 
-
+GoogleAds_monthly.to_excel(r"C:\Users\sebein\Desktop\結帳\Adwords\2022\2022_10\Googleads_MonthlyBilling_20221104.xlsx")

@@ -8,7 +8,7 @@ import re
 import pandas as pd
 from PDF_Functions import convert_pdf_to_txt
 
-walk = os.walk(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Aug\2022-08\Invoice")
+walk = os.walk(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Oct\2022-10\invoices")
 for root, dirs, files in walk:
     for name in files:
         string = convert_pdf_to_txt(os.path.join(root,name))
@@ -18,7 +18,7 @@ for root, dirs, files in walk:
             if "Advertiser Id:" in lines[i]:
                 advertiser_id = lines[i].split(':',1)
                 advertiser_id2 = re.search(r"\d{7,9}", advertiser_id[1])
-                ref_list = pd.read_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Aug\Monthly_File_202208_original.xlsx")
+                ref_list = pd.read_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Oct\Monthly_File_202210.xlsx")
                 for n in range(len(ref_list)):
                     try:
                         if int(advertiser_id2.group()) == int(ref_list['AdvertiserID'][n]):

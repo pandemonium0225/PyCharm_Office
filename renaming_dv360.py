@@ -8,6 +8,7 @@ import pandas as pd
 import sys, os, PyPDF2
 from natsort import natsorted, ns
 from Extract_Subfolders import merge_and_extract
+from Extract_Subfolders import merge_and_extract, save_to_invoice_folder
 from Extract_DBM_Amount import dbm_amount
 from natsort_merge import natsort_merge
 
@@ -37,6 +38,8 @@ def convert_pdf_to_txt(path):
 
 def rename_invoice():
     walk_directory = input("please input the directory within it you want to rename")
+    ref_list_location = input("please input the ref file location you want to refer... be sure to add file name at end")
+    ref_list = pd.read_excel(ref_list_location)
     walk = os.walk(walk_directory)
     for root, dirs, files in walk:
         for name in files:
@@ -45,20 +48,42 @@ def rename_invoice():
             lines = list(filter(bool,string.split('\n')))
             for i in range(len(lines)):
                 if "Advertiser Id:" in lines[i]:
-                    advertiser_id=lines[i].split(':',1)
-                    advertiser_id2=re.search(r"\d{7,9}",advertiser_id[1])
-                    print(advertiser_id2.group(),advertiser_id)
-                    ref_list = pd.read_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Sep\Monthly_File_202209.xlsx")
+                    advertiser_id = lines[i].split(':',1)
+                    advertiser_id2 = re.search(r"\d{7,9}",advertiser_id[1])
                     for n in range(len(ref_list)):
                         try:
                             if int(advertiser_id2.group()) == int(ref_list['AdvertiserID'][n]):
-                                row_no=ref_list[ref_list.AdvertiserID == int(advertiser_id2.group())].index.tolist()
-                                print("Renaming : {} to {}".format(name,"[" + str(row_no[0] + 2)+ "]" + name))
-                                os.rename(os.path.join(root,name),os.path.join(root,"[" + str(row_no[0] + 2)+ "]" + name.replace("/","")))
-                                break
-                        except:
-                            continue
+                                row_no = ref_list[ref_list.AdvertiserID == int(advertiser_id2.group())].index.tolist()
+                                advertiser = ref_list['Advertiser'][row_no[0]]
+                                advertiser_pattern = re.search(r"AN~(\w+\s?.*?)_MK~TW", advertiser)
+                                if advertiser_pattern is None:
+                                    print("Renaming : {} to {}".format(name, "[" + str(row_no[0] + 2) + "]" + name[
+                                                                                                              :-4] + "_" + advertiser))
+                                    os.rename(os.path.join(root, name), os.path.join(root, "[" + str(
+                                        row_no[0] + 2) + "]" + name[:-4] + "_" + advertiser + ".pdf"))
+                                    break
+                                else:
+                                    print("Renaming : {} to {}".format(name, "[" + str(row_no[0] + 2) + "]" + name[
+                                                                                                              :-4] + "_" + advertiser_pattern.group(
+                                        1)))
+                                    os.rename(os.path.join(root, name), os.path.join(root, "[" + str(
+                                        row_no[0] + 2) + "]" + name[:-4] + "_" + advertiser_pattern.group(1) + ".pdf"))
+                                    break
+                        except Exception as e:
+                            pass
                     break
+                    # print(advertiser_id2.group(),advertiser_id)
+                    # # ref_list = pd.read_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Sep\Monthly_File_202209.xlsx")
+                    # for n in range(len(ref_list)):
+                    #     try:
+                    #         if int(advertiser_id2.group()) == int(ref_list['AdvertiserID'][n]):
+                    #             row_no=ref_list[ref_list.AdvertiserID == int(advertiser_id2.group())].index.tolist()
+                    #             print("Renaming : {} to {}".format(name,"[" + str(row_no[0] + 2)+ "]" + name))
+                    #             os.rename(os.path.join(root,name),os.path.join(root,"[" + str(row_no[0] + 2)+ "]" + name.replace("/","")))
+                    #             break
+                    #     except:
+                    #         continue
+                    # break
 
 def sort_invoice_file():
     userpdflocation = input("Folder path to PDFs that need merging:")
@@ -86,6 +111,7 @@ def sort_invoice_file():
 
 if __name__ == '__main__':
     merge_and_extract()
+    save_to_invoice_folder()
     rename_invoice()
     dbm_amount()
     natsort_merge()

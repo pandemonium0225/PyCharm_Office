@@ -7,8 +7,8 @@ import os
 import re
 import pandas as pd
 from PDF_Functions import convert_pdf_to_txt
-ref_location = r"C:\Users\sebein\Desktop\結帳\FB\2022\Aug\PG_Monthly_Billing_AOD_new_20220826.xlsx"
-walk = os.walk(r"C:\Users\sebein\Desktop\結帳\FB\test\test2")
+ref_location = r"C:\Users\sebein\Desktop\結帳\FB\2022\Oct\PG_Monthly_Billing_FB.xlsx"
+walk = os.walk(r"C:\Users\sebein\Desktop\結帳\FB\2022\Oct\PG_Test")
 
 
 def get_row(ref_location,job_no):
@@ -47,7 +47,7 @@ for root, dirs, files in walk:
         advertiser_unique_list = list(advertiser_set)
         client_name_concat = "@".join(advertiser_unique_list)
         print("Renaming : {} to {}".format(name,"[" + str(row) + "]" + name[:-4] + "_" + client_name_concat + ".pdf"))
-        os.rename(os.path.join(root, name), os.path.join(root,"[" + str(row)+ "]" + name[:-4] + "_" +client_name_concat + ".pdf"))
+        os.rename(os.path.join(root, name), os.path.join(root,"[" + str(row)+ "]" + name[:-4] + "_" + client_name_concat + ".pdf"))
 
 
 

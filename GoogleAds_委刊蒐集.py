@@ -15,7 +15,7 @@ destination = r'D:\GoogleAds_IO'
 gc = pygsheets.authorize(service_file=r'C:\Users\sebein\Desktop\Pythonupload\pythonupload-307303-aae13f0bea1f.json')
 GoogleAds_IO =[]
 found_GoogleAdsIO=[]
-# copy google ads 後臺下載的報表，記得要把"Job"用剖析功能抓出Jobnumber資料
+# ctrl + copy google ads 後臺下載的報表，記得要把"Job"用剖析功能抓出Jobnumber資料
 data = pd.read_clipboard(
     sep=",",
     header="infer",
