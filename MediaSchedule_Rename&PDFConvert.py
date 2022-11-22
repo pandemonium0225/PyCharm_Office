@@ -31,12 +31,12 @@ def schedule_renaming():
             filepath = os.path.join(path,file)
             wb = load_workbook(filepath,data_only=True)
             sheet = wb.worksheets[3]
-            img = drawing.image.Image(r"D:\OfficeFunction\office_function\Images\sean.png")
-            sheet.add_image(img,"d61")
+            # img = drawing.image.Image(r"D:\OfficeFunction\office_function\Images\sean.png")
+            # sheet.add_image(img,"d61")
             schedule_name = sheet.cell(10,4).value
-            phase2 = schedule_name + "_P2" + ".xlsx"
-            phase1 = schedule_name + "_p1" + ".xlsx"
-            client = sheet.cell(8,4).value
+            client = sheet.cell(8, 4).value
+            phase2 = client + schedule_name + "_P2" + ".xlsx"
+            phase1 = client + schedule_name + "_p1" + ".xlsx"
             wb.save(filepath)
             if ("TW9098") in client:
                 print("renaming {} to {}".format(file, phase2))
