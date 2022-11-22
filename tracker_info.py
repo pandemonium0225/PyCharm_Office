@@ -11,15 +11,15 @@ postdate = (str(today.year) + str(today.month).zfill(2))
 gc = pygsheets.authorize(service_file=r'C:\Users\sebein\Desktop\Pythonupload\pythonupload-307303-aae13f0bea1f.json')
 
 sht_op = gc.open_by_url(
-'https://docs.google.com/spreadsheets/d/12Ts2BP9acoemXb-0bLgdBl8G6PQyMUEoUXrB0b3W8Fo/edit#gid=1390695304'
+    'https://docs.google.com/spreadsheets/d/12Ts2BP9acoemXb-0bLgdBl8G6PQyMUEoUXrB0b3W8Fo/edit#gid=1390695304'
 )
 
 sht_normal = gc.open_by_url(
-'https://docs.google.com/spreadsheets/d/1J_6W-5VE55M4-hjvP0m-hwU7RFRYgRmhVehS_LG5UWM/edit#gid=1014058029'
+    'https://docs.google.com/spreadsheets/d/1J_6W-5VE55M4-hjvP0m-hwU7RFRYgRmhVehS_LG5UWM/edit#gid=1014058029'
 )
 
 sht_pg_dv360 = gc.open_by_url(
-'https://docs.google.com/spreadsheets/d/1J3IXxfgy1_EUWLf_hr3vVVpdfn2zAj51sK4UUKIqK6s/edit#gid=1619667887'
+    'https://docs.google.com/spreadsheets/d/1J3IXxfgy1_EUWLf_hr3vVVpdfn2zAj51sK4UUKIqK6s/edit#gid=1619667887'
 )
 wks = sht_op.worksheets()
 wks_op = wks[1]
@@ -34,15 +34,21 @@ df_normal = wks_normal[0].get_as_df(start="A1", numerize=False, include_tailing_
 wks_pg_dv360 = sht_pg_dv360.worksheets()[0]
 df_pg_dv360 = wks_pg_dv360.get_as_df(start="A1", numerize=False, include_tailing_empty=False)
 
+
 # 整理下載的DV_360 Monthly Report增加欄位
 def dv360_spending_file():
     # df_monthly = pd.read_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Feb\Monthly_Accrual_Report_20220301.xlsx",skipfooter=0)
-    df_monthly = pd.read_excel(input("Please enter the DV360 Report File you want to compile"),skipfooter=0)
-    df_monthly.rename(columns={"Advertiser ID":"AdvertiserID"},inplace=True)
-    df_monthly[['MediaCost','PlatformFee','Invoice_MediaCost_InvalidRefund','Invoice_PlatformFee_InvalidRefundInvoice_Total','TrueView_Adjust_media','TrueView_Adjust_platform','ThridParty','CM','Perfomics_Invoice','Agency_Note','PFX_Act','Startdate','EndDate','Contact','Budget']] = ''
+    df_monthly = pd.read_excel(input("Please enter the DV360 Report File you want to compile"), skipfooter=15)
+    df_monthly.rename(columns={"Advertiser ID": "AdvertiserID"}, inplace=True)
+    df_monthly[['MediaCost', 'PlatformFee', 'Invoice_MediaCost_InvalidRefund',
+                'Invoice_PlatformFee_InvalidRefundInvoice_Total', 'TrueView_Adjust_media', 'TrueView_Adjust_platform',
+                'ThridParty', 'CM', 'Perfomics_Invoice', 'Agency_Note', 'PFX_Act', 'Startdate', 'EndDate', 'Contact',
+                'Budget']] = ''
     df_monthly['AdvertiserID'] = df_monthly['AdvertiserID'].astype('str')
     df_monthly['Insertion Order'] = df_monthly['Insertion Order'].fillna('').apply(str)
+    df_monthly = Merge_TTD(df_monthly)
     return df_monthly
+
 
 def extract_job(df_monthly):
     regex_list = [
@@ -52,7 +58,8 @@ def extract_job(df_monthly):
         r"(?:APEX|PMSC|PMZN|PMTW)\d{6}_.*?_",
         r"(?:ZNTWGDV|SCTWGDV|PMTWGDV)\d{6}.*?"
     ]
-    df_monthly['BCC_KeyIn'] = df_monthly['Insertion Order'].str.extract("(" + "|".join(regex_list) + ")") + "_" + postdate
+    df_monthly['BCC_KeyIn'] = df_monthly['Insertion Order'].str.extract(
+        "(" + "|".join(regex_list) + ")") + "_" + postdate
     return df_monthly
 
 
@@ -165,6 +172,32 @@ def pg_dv360(df_monthly):
             except:
                 pass
 
+
+def Merge_TTD(df_monthly):
+    TTD_file_location = input(r"please input the TTD report directory with filename and extension")
+    #     DV360_file_location = input(r"please input the DV360 report directory with filename and extension")
+    df_TTD = pd.read_excel(TTD_file_location)
+    #     df_dv360 = pd.read_excel(DV360_file_location, skipfooter=15)
+    df_TTD.rename(columns={'Advertiser ID': 'AdvertiserID',
+                           'Campaign ID': 'Insertion Order ID',
+                           'Advertiser Currency Code': 'Advertiser Currency',
+                           'Advertiser': 'Advertiser',
+                           'Campaign': 'Insertion Order',
+                           'Advertiser Cost (Adv Currency)': 'MediaCost'}, inplace=True
+                  )
+    df_TTD.drop(df_TTD[df_TTD['MediaCost'] <= 10].index, inplace=True)
+    df_TTD.sort_values(by=['Advertiser'])
+    df_TTD = df_TTD.reset_index(drop=True)
+    df_TTD['Partner'] = pd.Series(["TTD" for x in range(len(df_TTD.index))])
+    df_TTD['Month'] = pd.Series(["2022/10" for x in range(len(df_TTD.index))])
+
+    Merged_df = pd.concat([df_monthly, df_TTD], axis=0)
+    Merged_df = Merged_df.reset_index(drop=True)
+    #     merge_file_location = input(r"please input the file directory with filename and extension")
+    #     Merged_df.to_excel(merge_file_location)
+    return Merged_df
+
+
 if __name__ == '__main__':
     df_monthly = dv360_spending_file()
     df_monthly = extract_job(df_monthly)
@@ -172,5 +205,5 @@ if __name__ == '__main__':
     pmp_apex(df_monthly)
     op_apex(df_monthly)
     pg_dv360(df_monthly)
-    df_monthly.to_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Oct\\" + "Monthly_File_added" + postdate + ".xlsx", index=False)
-
+    df_monthly.to_excel(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Nov\\" + "Monthly_File_added" + postdate + ".xlsx",
+                        index=False)
