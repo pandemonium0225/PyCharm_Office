@@ -122,6 +122,6 @@ def create_folders():
 
 
 if __name__ == '__main__':
-    # renaming_schedule()
-    # convert_to_pdf()
+    renaming_schedule()
+    convert_to_pdf()
     create_folders()
