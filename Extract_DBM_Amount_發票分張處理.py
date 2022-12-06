@@ -37,7 +37,8 @@ def extract_spending_items(unit_invoice_content):
 
 def extract_client_id(unit_invoice_content):
     advertiser = []
-    ad_ids = re.compile(r'戶[\s]?.*?ID：(\d{7,10})', re.S | re.M)
+#     ad_ids = re.compile(r'戶[\s]?.*?ID：(\d{7,10})', re.S | re.M)
+    ad_ids = re.compile(r'戶[\s]?.*?ID：(?:\\n)?(\d{7,10})',re.S|re.M)
     for ad_id in ad_ids.finditer(unit_invoice_content):
         advertiser.append(ad_id.group(1))
 #     print(advertiser)
@@ -90,7 +91,7 @@ for path in filepaths:
             content = re.sub(r"第 \d 页，共 \d 页", "", content)
             content = re.sub(r"\$\d{1,10}\.\d{2}", '', content)
 #                 content = re.sub(r"-","",content)
-#                 content = re.sub(r"\n","",content)
+#             content = re.sub(r"\n","",content)
 #                 content = re.sub(r"\s","",content)
 #             print(content)
             unit_invoice_content.append(content)
