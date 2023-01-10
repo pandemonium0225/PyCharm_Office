@@ -7,7 +7,8 @@ import re
 
 gc = pygsheets.authorize(service_file=r'C:\Users\sebein\Desktop\Pythonupload\pythonupload-307303-aae13f0bea1f.json')
 sht_APEX_PMP = gc.open_by_url(
-    'https://docs.google.com/spreadsheets/d/12Ts2BP9acoemXb-0bLgdBl8G6PQyMUEoUXrB0b3W8Fo/edit#gid=1390695304')
+    'https://docs.google.com/spreadsheets/d/1VUNIGd9wTrKGZgMt9Fo9NWouGgrs9wBzW5aIVoZEJw4/edit#gid=1510624566'
+)
 
 wks = sht_APEX_PMP.worksheets()
 wks_apex = wks[0]
@@ -62,22 +63,25 @@ def get_receiverlist(job):
 
 
 def main():
-    for root, dirs, filelist in os.walk(r"C:\Users\sebein\Desktop\結帳\轉寄發票\202212\test"):
+    for root, dirs, filelist in os.walk(r"C:\Users\sebein\Desktop\結帳\DBM\2022\Dec\APEX 發票"):
         for file in filelist:
             if file.endswith('.pdf'):
                 job, bcc, gui = extract_gui_info(os.path.join(root, file))
                 invoice_dirs = os.path.join(root, file)
                 if job.startswith('PM'):
                     receiver, cc = get_receiverlist(job)
-                    print(receiver)
-                    print(cc)
-                    send_mail_via_outlook(receiver, cc, job, gui, invoice_dirs)
+                    if cc:
+                        print(job, " -> ", receiver, "This invoice will be cced...", cc)
+                        # send_mail_via_outlook(receiver, cc, job, gui, invoice_dirs)
+                    else:
+                        print(job, " -> ", receiver)
+                    # send_mail_via_outlook(receiver, cc, job, gui, invoice_dirs)
                 elif job.startswith('APEX'):
                     cc = ''
                     receiver = df_op_Apex[df_op_Apex['Job No'] == job]['Planner\'s Mail']
-                    if len(receiver > 0):
+                    if len(receiver) > 0:
                         print(job, " -> ", receiver.values[0])
-                        # send_mail_via_outlook(receiver.values[0],cc,job,gui,invoice_dirs)
+                        # send_mail_via_outlook(receiver.values[0], cc, job, gui, invoice_dirs)
                     else:
                         print("Something is wrong with jobnumber ", job, "...please check again or send it manually")
 

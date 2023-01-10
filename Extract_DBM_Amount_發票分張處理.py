@@ -96,7 +96,7 @@ for path in filepaths:
 #             print(content)
             unit_invoice_content.append(content)
         unit_invoice_content = str(unit_invoice_content)
-#         print(unit_invoice_content)
+        print(unit_invoice_content)
         print("*"*100)
         order_id = extract_order_id(unit_invoice_content)
         spending_items = extract_spending_items(unit_invoice_content)

@@ -49,9 +49,12 @@ for io_d in io_directory:
 
 for subdirs,dirs,filenames in os.walk(r"D:\GoogleAds_IO"):
     for filename in filenames:
-        results=re.search(r'((ZNTWGAD|ZNGDN|ZNTWGDN|PFTWGAD|SCTWGAD|APEX|ATYT|DGTWGAD)\d{6,9})',filename)
-#         print(results.group())
-        found_GoogleAdsIO.append(results.group())
+        try:
+            results=re.search(r'((ZNTWGAD|ZNGDN|ZNTWGDN|PFTWGAD|SCTWGAD|APEX|ATYT|DGTWGAD)\d{6,9})',filename)
+    #         print(results.group())
+            found_GoogleAdsIO.append(results.group())
+        except AttributeError:
+            print(filename)
 
 found_GoogleAdsIO_set=set(found_GoogleAdsIO)
 missed_GoogleAdsIO = total_result_set.difference(found_GoogleAdsIO)
@@ -61,7 +64,8 @@ print("-----------------------")
 print(missed_GoogleAdsIO)
 
 sht_op = gc.open_by_url(
-'https://docs.google.com/spreadsheets/d/12Ts2BP9acoemXb-0bLgdBl8G6PQyMUEoUXrB0b3W8Fo/edit#gid=1390695304'
+# 'https://docs.google.com/spreadsheets/d/12Ts2BP9acoemXb-0bLgdBl8G6PQyMUEoUXrB0b3W8Fo/edit#gid=1390695304'
+"https://docs.google.com/spreadsheets/d/1VUNIGd9wTrKGZgMt9Fo9NWouGgrs9wBzW5aIVoZEJw4/edit#gid=1390695304"
 )
 
 sht_normal = gc.open_by_url(
@@ -107,8 +111,11 @@ def googleads_dedup():
     dedup = r'D:\GoogleAds_IO\dedup'
     for subdirs, dirs, filenames in os.walk(r"D:\GoogleAds_IO"):
         for filename in filenames:
-            job_no = re.search(r"((ZNTWGAD|ZNGDN|ZNTWGDN|PFTWGAD|SCTWGAD|APEX|ATYT|DGTWGAD)\d{6,9})", filename).group()
-            update_time = os.path.getmtime(subdirs + '\\' + filename)
+            try:
+                job_no = re.search(r"((ZNTWGAD|ZNGDN|ZNTWGDN|PFTWGAD|SCTWGAD|APEX|ATYT|DGTWGAD)\d{6,9})", filename).group()
+                update_time = os.path.getmtime(subdirs + '\\' + filename)
+            except AttributeError:
+                print(filename)
             for i in range(len(filenames)):
                 if (job_no not in latest):
                     latest[job_no] = {filename: update_time}

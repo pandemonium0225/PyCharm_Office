@@ -12,7 +12,8 @@ today = datetime.datetime.now()
 postdate = (str(today.year) + str(today.month).zfill(2))
 gc = pygsheets.authorize(service_file=r'C:\Users\sebein\Desktop\Pythonupload\pythonupload-307303-aae13f0bea1f.json')
 sht_op = gc.open_by_url(
-    'https://docs.google.com/spreadsheets/d/12Ts2BP9acoemXb-0bLgdBl8G6PQyMUEoUXrB0b3W8Fo/edit#gid=1390695304'
+    # 'https://docs.google.com/spreadsheets/d/12Ts2BP9acoemXb-0bLgdBl8G6PQyMUEoUXrB0b3W8Fo/edit#gid=1390695304'
+    'https://docs.google.com/spreadsheets/d/1VUNIGd9wTrKGZgMt9Fo9NWouGgrs9wBzW5aIVoZEJw4/edit#gid=1390695304'
 )
 sht_normal = gc.open_by_url(
     'https://docs.google.com/spreadsheets/d/1J_6W-5VE55M4-hjvP0m-hwU7RFRYgRmhVehS_LG5UWM/edit#gid=1014058029'
@@ -24,8 +25,8 @@ wks_normal = sht_normal.worksheets()
 df_normal = wks_normal[0].get_as_df(start="A1", numerize=False, include_tailing_empty=False)
 
 # 將下載報表轉換為dataframe，目前讀檔預設為excel檔
-GoogleAds_monthly = pd.read_excel(r"C:\Users\sebein\Desktop\結帳\Adwords\2022\2022_10\Billed cost_20221104.xlsx",
-                                  skiprows=2,
+GoogleAds_monthly = pd.read_excel(r"C:\Users\sebein\Desktop\結帳\Adwords\2022\2022-12\Billed cost_20230104.xlsx",
+                                  skiprows=0,
                                   index_col=None,
                                   na_values=['NA']
                                   )
@@ -83,4 +84,4 @@ for k in range(len(GoogleAds_monthly['jobnumber'])):
 
 # print(GoogleAds_monthly[GoogleAds_monthly['owner'] != '']['owner'])
 
-GoogleAds_monthly.to_excel(r"C:\Users\sebein\Desktop\結帳\Adwords\2022\2022_10\Googleads_MonthlyBilling_20221104.xlsx")
+GoogleAds_monthly.to_excel(r"C:\Users\sebein\Desktop\結帳\Adwords\2022\2022-12\PFX_Monthly_Billed cost.xlsx")

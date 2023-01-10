@@ -3,6 +3,7 @@ import os
 import sys
 import PyPDF2
 from PyPDF2 import PdfFileMerger, PdfFileReader
+from natsort_merge import natsort_merge
 
 source = input("請輸入PUBLISHER的發票資料夾位置")
 
@@ -42,6 +43,7 @@ def merge_invoice():
 if __name__ == "__main__":
     del_DS_Store()
     merge_invoice()
+    natsort_merge()
 
 
 

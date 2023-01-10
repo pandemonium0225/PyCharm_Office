@@ -15,7 +15,7 @@ io_directory = [r'P:\PM Client\Performics\Performics Operation PG\_IO\Programmat
 directory = r'D:\test' # 確認是否需要留這個變數
 destination = r'D:\destination'
 io_list = []
-path = r'C:\Users\sebein\Desktop\結帳\DBM\2022\Oct\Monthly_File_202210.xlsx'
+path = r'C:\Users\sebein\Desktop\結帳\DBM\2022\Dec\PG_MainFile_202212.xlsx'
 data = pd.DataFrame(pd.read_excel(path))
 for i in data['Insertion Order']:
     try:
@@ -58,8 +58,11 @@ def get_io_difference():
     found_io = []
     for folder, dirs, filenames in os.walk(destination):
         for file in filenames:
-            job_number = re.search(r"([a-zA-Z]{4,7}\d{6,10})", file)
-            found_io.append(job_number.group(1))
+            try:
+                job_number = re.search(r"([a-zA-Z]{4,7}\d{6,10})", file)
+                found_io.append(job_number.group(1))
+            except Exception as e:
+                print(file,"not found")
     found_io_set = set(found_io)
     missed_io = io_set.difference(found_io_set)
     print("-----------------------")
@@ -100,7 +103,8 @@ def check_owner():
     missed_io = get_io_difference()
     gc = pygsheets.authorize(service_file=r'C:\Users\sebein\Desktop\Pythonupload\pythonupload-307303-aae13f0bea1f.json')
     sht_op = gc.open_by_url(
-        'https://docs.google.com/spreadsheets/d/12Ts2BP9acoemXb-0bLgdBl8G6PQyMUEoUXrB0b3W8Fo/edit#gid=1390695304'
+        # 'https://docs.google.com/spreadsheets/d/12Ts2BP9acoemXb-0bLgdBl8G6PQyMUEoUXrB0b3W8Fo/edit#gid=1390695304'
+        'https://docs.google.com/spreadsheets/d/1VUNIGd9wTrKGZgMt9Fo9NWouGgrs9wBzW5aIVoZEJw4/edit#gid=1390695304'
     )
 
     sht_normal = gc.open_by_url(

@@ -9,7 +9,7 @@ DV360_file_location = input(r"please input the DV360 report directory with filen
 
 def Merge_TTD():
     df_TTD = pd.read_excel(TTD_file_location)
-    df_dv360 = pd.read_excel(DV360_file_location)
+    df_dv360 = pd.read_excel(DV360_file_location, skipfooter=15)
     df_TTD.rename(columns={'Advertiser ID': 'AdvertiserID',
                            'Campaign ID': 'Insertion Order ID',
                            'Advertiser Currency Code': 'Advertiser Currency',

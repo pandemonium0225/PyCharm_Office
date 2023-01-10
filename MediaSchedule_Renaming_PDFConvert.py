@@ -6,6 +6,7 @@ import win32api
 import re
 import shutil
 
+
 def renaming_schedule():
     schedule_location = input("please paste the directory you want to rename...")
     schedule_folder = "schedules"
@@ -46,7 +47,9 @@ def renaming_schedule():
             elif "HK9067" in client:
                 print("renaming {} to {}".format(file, phase1))
                 wb.save(os.path.join(folder, phase1))
-
+            elif "TW3367" in client:
+                print("renaming {} to {}".format(file, phase2))
+                wb.save(os.path.join(folder, phase2))
             else:
                 print("Non_Apex Campaign, passed")
             wb.close()
@@ -79,6 +82,7 @@ def convert_to_pdf():
             except Exception as e:
                 print(e)
 
+
 def get_jobno_pair():
     job_pair = {}
     folder_name_list = []
@@ -97,6 +101,7 @@ def get_jobno_pair():
             except Exception as e:
                 print(file,e)
     return job_pair, folder_name_list, schedule_location
+
 
 def create_folders():
     job_pair, folder_name_list, schedule_location = get_jobno_pair()

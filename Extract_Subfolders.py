@@ -31,7 +31,7 @@ def merge_and_extract():
 
 
 def save_to_invoice_folder():
-    rootDir = r"C:\Users\sebein\Desktop\結帳\Adwords\2022\2022_10\GoogleAdsInvoice"
+    rootDir = r"C:\Users\sebein\Desktop\結帳\DBM\2022\Nov\2022-11"
     files = os.listdir(rootDir)
     os.mkdir(rootDir + "\\invoices")
     save_location = rootDir + "\\invoices\\"
